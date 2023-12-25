@@ -1,5 +1,5 @@
 ## Базовый образ для сборки
-FROM python:3.10-slim
+FROM python:3.11.6-slim
 
 # Указываем рабочую директорию
 WORKDIR /usr/src/app
@@ -29,3 +29,7 @@ RUN apt-get update && \
 
 # Копируем проект
 COPY ./src ./src
+
+# Запускаем проект
+#CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0"]
+#ENTRYPOINT ["./entrypoint.sh"]

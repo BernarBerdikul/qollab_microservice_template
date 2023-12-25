@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  test_menu_app:
-    container_name: test_menu_app
+  test_app:
+    container_name: test_app
     build:
       context: .
       dockerfile: DockerfileTest
@@ -10,13 +10,13 @@ services:
       CONFIG_FILE: "config.test.yaml"
     command: "pytest -vv"
     networks:
-      - test_menu_network
+      - test_salary_ticket_service_network
     depends_on:
-      test_menu_postgres_db:
+      test_postgres:
         condition: service_healthy
 
-  test_menu_postgres_db:
-    container_name: test_menu_postgres_db
+  test_postgres:
+    container_name: test_postgres
     image: postgres:15.1-alpine
     environment:
       - POSTGRES_DB=test
@@ -25,7 +25,7 @@ services:
     expose:
       - 15432
     networks:
-      - test_menu_network
+      - test_salary_ticket_service_network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U test" ]
       interval: 5s
@@ -33,6 +33,6 @@ services:
       retries: 100
 
 networks:
-  test_menu_network:
+  test_salary_ticket_service_network:
     external:
-      name: menu_network
+      name: test_salary_ticket_service_network

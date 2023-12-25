@@ -3,7 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import yaml  # type: ignore
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class App(BaseSettings):

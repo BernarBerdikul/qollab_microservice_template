@@ -3,6 +3,7 @@ import uuid as uuid_pkg
 from sqlmodel import Field, Relationship, SQLModel
 
 from src.models.mixins import TimestampMixin, UUIDMixin
+from src.schemas.base import OrmRootModel
 
 __all__ = (
     "Submenu",
@@ -57,8 +58,8 @@ class SubmenuRead(SubmenuBase, UUIDMixin):
     dishes_count: int | None = Field(default=0)
 
 
-class SubmenuList(SQLModel):
-    __root__: list[SubmenuRead]
+class SubmenuList(OrmRootModel):
+    root: list[SubmenuRead]
 
 
 class SubmenuDetail(SubmenuRead):
@@ -66,10 +67,14 @@ class SubmenuDetail(SubmenuRead):
 
 
 class SubmenuCreate(SubmenuBase):
-    parent_id: uuid_pkg.UUID | None
+    parent_id: uuid_pkg.UUID | None = Field(
+        title="Идентификатор родительского меню",
+        default=None,
+        nullable=True,
+    )
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "title": "My submenu",
                 "description": "My submenu description",
@@ -88,7 +93,7 @@ class SubmenuUpdate(SQLModel):
     )
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "title": "My updated submenu",
                 "description": "My updated submenu description",

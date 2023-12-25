@@ -9,4 +9,4 @@
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 ----
 
-menu app project for Ylab course
+# Salary ticket service app project for BTS company

@@ -13,7 +13,7 @@ class FakeCache(AbstractCache):
     async def get(self, name: str) -> dict | None:
         return self.cache.get(name)
 
-    async def set(self, name: str, value: Any, expire: int = 0):
+    async def set(self, name: str, value: Any, expire: int = 0) -> None:
         self.cache.update({name: value})
 
     async def delete(self, name: str) -> None:

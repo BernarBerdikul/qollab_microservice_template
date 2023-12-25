@@ -15,13 +15,12 @@ from src.models import (
     SubmenuRead,
     SubmenuUpdate,
 )
+from src.repositories import SubmenuRepository
 
 __all__ = (
     "SubmenuService",
     "get_submenu_service",
 )
-
-from src.repositories import SubmenuRepository
 
 
 @dataclass
@@ -34,8 +33,11 @@ class SubmenuService(ServiceMixin):
             return cached_submenus
 
         submenus = await self.repository.list(menu_id=menu_id)
-        if serialized_submenus := SubmenuList.from_orm(submenus):
-            await self.cache.set(name=self.cache_key, value=serialized_submenus.json())
+        if serialized_submenus := SubmenuList(submenus):
+            await self.cache.set(
+                name=self.cache_key,
+                value=serialized_submenus.model_dump_json(),
+            )
         return serialized_submenus
 
     async def get_detail(self, submenu_id: uuid_pkg.UUID) -> SubmenuDetail:

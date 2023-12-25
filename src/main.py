@@ -1,16 +1,11 @@
-import aioredis  # noqa
+import redis
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from src import settings
-from src.api.v1.resources import dishes as dishes_v1
-from src.api.v1.resources import menus as menus_v1
-from src.api.v1.resources import submenus as submenus_v1
-from src.api.v2.resources import dishes as dishes_v2
-from src.api.v2.resources import menus as menus_v2
-from src.api.v2.resources import submenus as submenus_v2
+from src.api.v1.api import api_router as api_v1_router
 from src.db import cache, dummy_cache, redis_cache  # noqa
 from src.middlewares import add_process_time_header
 from src.schemas import HealthCheck
@@ -32,14 +27,7 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=add_process_time_header)
 
 
 # Подключаем роутеры к серверу
-# API version 1
-app.include_router(router=menus_v1.router, prefix="/api/v1")
-app.include_router(router=submenus_v1.router, prefix="/api/v1")
-app.include_router(router=dishes_v1.router, prefix="/api/v1")
-# API version 2
-app.include_router(router=menus_v2.router, prefix="/api/v2")
-app.include_router(router=submenus_v2.router, prefix="/api/v2")
-app.include_router(router=dishes_v2.router, prefix="/api/v2")
+app.include_router(router=api_v1_router, prefix="/api/v1")
 
 
 @app.get("/", response_model=HealthCheck, tags=["status"])
@@ -56,7 +44,7 @@ async def startup():
     """Подключаемся к базам при старте сервера"""
     # Redis cache
     cache.cache = redis_cache.RedisCache(
-        cache=await aioredis.Redis(
+        cache=await redis.asyncio.Redis(
             host=settings.redis.host,
             port=settings.redis.port,
             db=settings.redis.db,
@@ -64,8 +52,8 @@ async def startup():
             max_connections=settings.redis.max_connections,
         ),
     )
-    # Dummy cache
-    # cache.cache = dummy_cache.DummyCache()
+    # Fake cache
+    # cache.cache = fake_cache.FakeCache()
 
 
 @app.on_event("shutdown")

@@ -1,6 +1,7 @@
 from sqlmodel import Field, Relationship, SQLModel
 
 from src.models.mixins import TimestampMixin, UUIDMixin
+from src.schemas.base import OrmRootModel
 
 __all__ = (
     "Menu",
@@ -53,15 +54,15 @@ class MenuRead(MenuBase, UUIDMixin):
     dishes_count: int | None = Field(default=0)
 
 
-class MenuList(SQLModel):
-    __root__: list[MenuRead]
+class MenuList(OrmRootModel):
+    root: list[MenuRead]
 
 
 class MenuCreate(MenuBase):
     ...
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "title": "My menu",
                 "description": "My menu description",
@@ -74,7 +75,7 @@ class MenuUpdate(SQLModel):
     description: str | None = Field(title="Описание меню", max_length=255)
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "title": "My updated menu",
                 "description": "My updated menu description",

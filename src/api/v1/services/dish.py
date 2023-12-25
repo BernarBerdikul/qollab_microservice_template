@@ -27,8 +27,11 @@ class DishService(ServiceMixin):
             return cached_dishes
 
         dishes = await self.repository.list(submenu_id=submenu_id)
-        if serialized_dishes := DishList.from_orm(dishes):
-            await self.cache.set(name=self.cache_key, value=serialized_dishes.json())
+        if serialized_dishes := DishList(dishes):
+            await self.cache.set(
+                name=self.cache_key,
+                value=serialized_dishes.model_dump_json(),
+            )
         return serialized_dishes
 
     async def get_detail(self, dish_id: uuid_pkg.UUID) -> DishRead:

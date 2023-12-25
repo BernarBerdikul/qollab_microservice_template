@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import orjson
-from aioredis import Redis
+from redis.asyncio import Redis
 
 from src import settings
 from src.db.cache import AbstractCache

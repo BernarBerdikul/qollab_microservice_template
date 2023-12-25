@@ -1,20 +1,20 @@
 app:
-  project_name: fast-api-menu
-  description: fast-api-menu project's description
+  project_name: salary-ticket-service
+  description: salary-ticket-service project's description
   version: 0.1.0
   api_doc_prefix: /api/v1
   debug: true
   db_exclude_tables: []
 
 postgres:
-  host: menu_postgres_db
+  host: postgres
   port: 5432
-  dbname: my_menu
-  user: my_menu
-  password: my_menu
+  dbname: salary_ticket_service
+  user: salary_ticket_service
+  password: salary_ticket_service
 
 redis:
-  host: menu_redis
+  host: redis
   port: 6379
   db: 0
   encoding: utf-8

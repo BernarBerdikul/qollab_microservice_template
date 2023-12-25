@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   app:
-    container_name: grade_service_app
+    container_name: salary_ticket_service_app
+    platform: linux/amd64  # Specify the desired platform
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,7 +13,7 @@ services:
     volumes:
       - ./src:/usr/src/app/src/
     networks:
-      - grade_service_network
+      - salary_ticket_service_network
     ports:
       - "8000:8000"
     depends_on:
@@ -22,14 +23,14 @@ services:
         condition: service_healthy
 
   redis:
-    container_name: grade_service_redis
+    container_name: salary_ticket_service_redis
     image: redis:7.0.8-alpine
     expose:
       - 6379
     ports:
       - "6379:6379"
     networks:
-      - grade_service_network
+      - salary_ticket_service_network
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 5s
@@ -37,29 +38,29 @@ services:
       retries: 100
 
   postgres:
-    container_name: grade_service_postgres_db
+    container_name: salary_ticket_service_postgres
     image: postgres:15.1-alpine
     volumes:
-      - grade_service_postgres_data:/var/lib/postgresql/data/
+      - salary_ticket_service_postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=grade_service
-      - POSTGRES_USER=grade_service
-      - POSTGRES_PASSWORD=grade_service
+      - POSTGRES_DB=salary_ticket_service
+      - POSTGRES_USER=salary_ticket_service
+      - POSTGRES_PASSWORD=salary_ticket_service
     expose:
       - 5432
     ports:
       - "5432:5432"
     networks:
-      - grade_service_network
+      - salary_ticket_service_network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U grade_service" ]
+      test: [ "CMD-SHELL", "pg_isready -U salary_ticket_service" ]
       interval: 5s
       timeout: 20s
       retries: 100
 
 networks:
-  grade_service_network:
-    name: grade_service_network
+  salary_ticket_service_network:
+    name: salary_ticket_service_network
 
 volumes:
-  grade_service_postgres_data:
+  salary_ticket_service_postgres_data:

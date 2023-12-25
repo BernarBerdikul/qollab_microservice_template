@@ -7,10 +7,7 @@ from src.api.v1.services import MenuService, get_menu_service
 from src.models import MenuCreate, MenuList, MenuRead, MenuUpdate
 from src.schemas import StatusMessage
 
-router = APIRouter(
-    prefix="/menus",
-    tags=["menus"],
-)
+router = APIRouter()
 
 
 @router.get(

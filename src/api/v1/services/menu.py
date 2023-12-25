@@ -28,8 +28,11 @@ class MenuService(ServiceMixin):
             return cached_menus
 
         menus = await self.repository.list()
-        if serialized_menus := MenuList.from_orm(menus):
-            await self.cache.set(name=self.cache_key, value=serialized_menus.json())
+        if serialized_menus := MenuList(menus):
+            await self.cache.set(
+                name=self.cache_key,
+                value=serialized_menus.model_dump_json(),
+            )
         return serialized_menus
 
     async def get_detail(self, menu_id: uuid_pkg.UUID) -> MenuRead:
@@ -45,7 +48,10 @@ class MenuService(ServiceMixin):
             )
 
         if serialized_menu := MenuRead.from_orm(menu):
-            await self.cache.set(name=f"{menu_id}", value=serialized_menu.json())
+            await self.cache.set(
+                name=f"{menu_id}",
+                value=serialized_menu.model_dump_json(),
+            )
         return serialized_menu
 
     async def create(self, data: MenuCreate) -> MenuRead:
