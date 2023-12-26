@@ -13,10 +13,7 @@ from src.models import (
 )
 from src.schemas import StatusMessage
 
-router = APIRouter(
-    prefix="/menus/{menu_id}/submenus",
-    tags=["submenus"],
-)
+router = APIRouter()
 
 
 @router.get(
